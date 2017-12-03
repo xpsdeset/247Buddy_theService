@@ -1,0 +1,15 @@
+node_modules
+public
+.tmp
+.idea
+client/bower_components
+dist
+mongodb
+/server/config/local.env.js
+npm-debug.log
+coverage
+.vagrant
+247buddy
+logs
+auth
+client/uploads/*

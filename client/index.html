@@ -1,0 +1,122 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://www.facebook.com/2008/fbml">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <base href="/">
+    <title>247Buddy</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, minimum-scale=1">
+    <meta name="description" content="247Buddy - Listen and Vent anonymous">
+    <meta name="keywords" content="Talk Therapy anonymous venting listening">
+    <meta name="google-site-verification" content="iSoXNinOM-h-gS6ZPPrRxpTnBRIZNGsF3C3tysnPAcg" />
+
+
+
+    <meta property="og:title" content="247Buddy - Listen and Vent anonymous"/>
+    <meta property="og:site_name" content="247Buddy"/>
+    <meta property="og:url" content="https://247buddy.net"/>
+    <meta property="og:image" content="https://247buddy.net/Banner.png"/>  
+    <meta property="og:description" content="Want to be heard? In the world of social media, there are few mediums which allows you to freely talk about your problems and frustrations.You need a place which doesn't hold your secrets against you.A place which doesn't judge you by your race, gender, age or sexual orientation, but rather tries to understand you. We connect you with you."/>
+    <meta property="og:type" content="website"/>
+	
+
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+    <!-- build:css(client) app/vendor.css -->
+      <!-- bower:css -->
+      <link rel="stylesheet" href="bower_components/angular-growl-v2/build/angular-growl.css" />
+      <!-- endbower -->
+    <!-- endbuild -->
+    <!-- build:css({.tmp,client}) app/app.css -->
+      <link rel="stylesheet" href="app/app.css">
+      <!-- injector:css -->
+      <link rel="stylesheet" href="components/modal/modal.css">
+      <!-- endinjector -->
+    <!-- endbuild -->
+  </head>
+  <body ng-app="247App" class="{{currentState}}_root">
+    <!--[if lt IE 7]>
+      <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+
+    <!-- Add your site or application content here -->
+    <navbar></navbar>
+    
+    <div ui-view class="main-body"></div>
+    <footer></footer>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-108639729-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-108639729-1');
+    </script>
+
+
+    <!--[if lt IE 9]>
+    <script src="bower_components/es5-shim/es5-shim.js"></script>
+    <script src="bower_components/json3/lib/json3.min.js"></script>
+    <![endif]-->
+    <!-- build:js({client,node_modules}) app/vendor.js -->
+      <!-- bower:js -->
+      <script src="bower_components/jquery/dist/jquery.js"></script>
+      <script src="bower_components/angular/angular.js"></script>
+      <script src="bower_components/angular-resource/angular-resource.js"></script>
+      <script src="bower_components/angular-cookies/angular-cookies.js"></script>
+      <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+      <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+      <script src="bower_components/lodash/dist/lodash.compat.js"></script>
+      <script src="bower_components/angular-socket-io/socket.js"></script>
+      <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+      <script src="bower_components/angular-validation-match/dist/angular-validation-match.min.js"></script>
+      <script src="bower_components/angular-timeago/dist/angular-timeago.js"></script>
+      <script src="bower_components/simple-web-notification/web-notification.js"></script>
+      <script src="bower_components/angular-web-notification/angular-web-notification.js"></script>
+      <script src="bower_components/angular-growl-v2/build/angular-growl.js"></script>
+      <script src="bower_components/angular-animate-1.5.5/angular-animate.js"></script>
+      <script src="bower_components/angular-recaptcha/release/angular-recaptcha.js"></script>
+      <script src="bower_components/ng-file-upload/ng-file-upload.js"></script>
+      <!-- endbower -->
+      <script src="bower_components/socket.io-client/dist/socket.io.js"></script>
+    <!-- endbuild -->
+    <!-- build:js(.tmp) app/app.js -->
+      <script src="app/app.js"></script>
+      <!-- injector:js -->
+      <script src="components/auth/auth.module.js"></script>
+      <script src="components/util/util.module.js"></script>
+      <script src="app/account/account.js"></script>
+      <script src="app/account/login/login.controller.js"></script>
+      <script src="app/account/settings/settings.controller.js"></script>
+      <script src="app/account/signup/signup.controller.js"></script>
+      <script src="app/admin/admin.router.js"></script>
+      <script src="app/admin/badge/list.controller.js"></script>
+      <script src="app/admin/loading/create.controller.js"></script>
+      <script src="app/admin/loading/list.controller.js"></script>
+      <script src="app/admin/report/list.controller.js"></script>
+      <script src="app/admin/sponsor/create.controller.js"></script>
+      <script src="app/admin/sponsor/list.controller.js"></script>
+      <script src="app/app.constant.js"></script>
+      <script src="app/index/index.controller.js"></script>
+      <script src="app/index/index.js"></script>
+      <script src="app/talk/talk.controller.js"></script>
+      <script src="app/talk/talk.js"></script>
+      <script src="app/util/growlb.service.js"></script>
+      <script src="components/auth/auth.service.js"></script>
+      <script src="components/auth/interceptor.service.js"></script>
+      <script src="components/auth/router.decorator.js"></script>
+      <script src="components/auth/user.service.js"></script>
+      <script src="components/footer/footer.directive.js"></script>
+      <script src="components/modal/modal.service.js"></script>
+      <script src="components/mongoose-error/mongoose-error.directive.js"></script>
+      <script src="components/navbar/navbar.controller.js"></script>
+      <script src="components/navbar/navbar.directive.js"></script>
+      <script src="components/notification/notification.service.js"></script>
+      <script src="components/socket/socket.service.js"></script>
+      <script src="components/typing/jquery.typing-0.2.0.min.js"></script>
+      <script src="components/typing/typing.directive.js"></script>
+      <script src="components/util/util.service.js"></script>
+      <!-- endinjector -->
+    <!-- endbuild -->
+  </body>
+</html>

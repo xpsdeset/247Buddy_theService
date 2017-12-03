@@ -1,0 +1,8 @@
+div(ng-if='$ctrl.tosAgreed')
+    div(ng-include='"app/talk/buttons.html"' ng-if="$ctrl.status == 'not-paired'")
+    div(ng-include='"app/talk/loading.html"' ng-if="$ctrl.status == 'finding-pair'")
+    div(ng-include='"app/talk/banned.html"' ng-if="$ctrl.status == 'banned'")
+    .chat(ng-include='"app/talk/chat.html"' ng-if="$ctrl.status == 'paired'")
+div(ng-include='"app/talk/tos.html"' ng-if='!$ctrl.tosAgreed')
+
+

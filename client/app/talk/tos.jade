@@ -1,0 +1,59 @@
+form(ng-submit="$ctrl.setAgree()")
+  .aboutus.green_bg
+    .container
+      .row
+        .col-lg-12.col-md-12.col-sm-12
+          h1 Hello there!
+          p 
+            span(ng-if="!$ctrl.disableIAgree") Before you connect to your partner,  
+            br 
+            | Here are some &nbsp;
+            strong do's and don'ts
+      .row.blue_bg
+        .col-lg-12.col-md-12.col-sm-12
+          ul
+            li 247Buddy is not a dating site. Listen, process then respond.
+            li You are talking to a human being just like you. Respect their opinions, situation, feelings.
+            li You are paired with a person with whom you can or cannot relate to you, be gentle with your buddy.
+            li If you feel you can't add much to the conversation do close, such conversations in a polite manner.
+            li Do not report a user who gets disconnected, your partner may have bad internet or we might be having some issues with ISP, browser or our 247Buddy servers.
+            li Report a user only if he is trolling, looking for sex, spamming or reasons you can justify.
+            li Please do not report a user whom you cannot relate to or who doesn't understand your opinion.
+            li Although no chat is saved on our server, but sharing of personal details such as name, email ids or any other details is solely the responsibility of the users.
+            li Please be open minded about all communities, sexual orientation, drug addicts, self harmers etc.
+            li Remember this is not an alternative to professional psychological healthcare.
+            li All users have the same priority when in queue to be paired with any user.
+            li We strongly recommend to give your partner full attention and even if you have to go away for some time, do inform your partner.
+            li We are neither responsible nor do we have any control over the behavior of it's users. It's the responsibility of the individual user to behave themselves.
+            li We do not have any age restrictions. Any age group is welcomed and 247Buddy hopes that it's users are gentle, respectful and understand their buddy regardless of the age.
+            li We do ban a user by its IP address, but at times IP address is not good enough to keep reported users away, 247Buddy hopes it's users co-operate in dealing with such trolls.
+            li IMPORTANT: If you are considering suicide or if you or any other person may be in danger - please call now 1-800-273-TALK (24 hours hotline) or 911.
+
+
+        .col-lg-6.col-md-6.col-sm-6
+          .imp_tips
+            h3 Important Tips For Listeners
+            ul
+              li Listen, Process then Respond.
+              li Please do not make fun of, or criticize your venters.
+              li Be patient with your venters.
+              li Even if you cannot relate to your buddy's situation,try to understand/comfort them and if you want to leave the conversation, end in a positive note.
+              li You can be biased about your opinion, but be gentle and avoid being vocal when trying to express your views.
+              li Give advice only when asked for or you feel its really needed. 
+
+        .col-lg-6.col-md-6.col-sm-6
+          h3 For Venters
+          ul
+            li Try to be open minded and process the listener's thoughts.
+            li Even if you are paired to someone who cannot relate to you, avoid being abrasive.
+
+        .col-lg-12.col-md-12.col-sm-12(ng-if="!$ctrl.disableIAgree")
+          .captcha_container
+            p(vc-recaptcha ng-model="$ctrl.notARobot" required)
+            p(ng-show='$ctrl.captchaErr') Please verify you are not a robot 
+        .col-lg-12.col-md-12.col-sm-12(ng-if="!$ctrl.disableIAgree")
+          .chatnow_btn_terms
+            button.blue_button(ng-click="$ctrl.showAgree=true") I Agree 
+            p By clicking this button, you agree to 247Buddy’s &nbsp;
+              a(ui-sref="privacy") Privacy policy
+

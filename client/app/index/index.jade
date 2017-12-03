@@ -1,0 +1,105 @@
+.homepage.green_bg
+  .container
+    .row
+      .col-lg-12
+        .flex_container
+          .text_panel
+            h2 Want to be heard?
+            p
+              | In the world of social media, there are few mediums which allows you to freely talk about your problems and frustrations.
+              br
+              | You need a place which doesn't hold your secrets against you
+              br
+              | A place which doesn't judge you by your race, gender, age or sexual orientation, but rather tries to understand you.
+              br
+              | We connect you with you.
+            h2 What is 247Buddy?
+            p
+              | You can either talk about anything on your mind and our system finds a buddy for you
+              br
+              | Or
+              br
+              | You can give your time to someone who wants to be heard.
+            button.blue_button(ui-sref="home-ip") Find your Buddy
+          .img_panel
+            img(src='assets/images/laptop_with_hand.png')
+          .down_arrow.hide
+            a
+              img(src='assets/images/down_arrow.png')
+.homepage.blue_bg
+  .container
+    .row.flex_container
+      .col-lg-6.col-md-6.col-sm-6.col-xs-12
+        .text_img_panel
+          .text_panel
+            h2 Chat & forget
+            p We don't store any thing. Your conversations are delivered to your buddy and forgotten.
+
+          .img_panel
+            img(src='assets/images/laptop_with_hand_1.png')
+      .col-lg-6.col-md-6.col-sm-6.col-xs-12
+        .features
+          .row
+            .col-lg-6.col-md-6.col-sm-6.col-xs-12
+              .thumbnail_with_info
+                img(src='assets/images/anonymous.png')
+                h4 It's Anonymous
+                p No signups needed, find your buddy without hassle.
+            .col-lg-6.col-md-6.col-sm-6.col-xs-12.hide
+              .thumbnail_with_info
+                img(src='assets/images/secure.png')
+                h4 It's Secure
+                p We keep your identity and your conversations secure.
+            .col-lg-6.col-md-6.col-sm-6.col-xs-12
+              .thumbnail_with_info
+                img(src='assets/images/24X7.png')
+                h4 It's 24x7
+                p Someone here hopefully is waiting for you.
+            .col-lg-6.col-md-6.col-sm-6.col-xs-12
+              .thumbnail_with_info
+                img(src='assets/images/free.png')
+                h4 It's Free!
+                p All the money in the world can't get a good conversation.
+      .down_arrow.hide
+          a
+            img(src='assets/images/down_arrow.png')
+.homepage.green_bg.users_love_buddy.hide
+  .container
+    .row
+      .col-lg-12
+        h2 Recent contributions to 247Buddy
+        .text_dscr
+          h4.text-center 247Buddy is free to use but if you had a good conversation, you can buy a badge to support us.
+        div(ng-if="$ctrl.badges.length",ng-repeat="badge in $ctrl.badges | limitTo:3")
+          .col-lg-4.col-md-4.col-sm-4.col-xs-12
+            .speech_bubble
+              .img_box
+                img(ng-show="'{{badge.type}}'=='silver'",ng-src='assets/images/silver_medal.png')
+                img(ng-show="'{{badge.type}}'=='gold'",ng-src='assets/images/medal_2.png')
+                img(ng-show="'{{badge.type}}'=='bronze'",ng-src='assets/images/medal_1.png')
+              p {{badge.comment}}
+
+      .down_arrow.hide
+          a
+            img(src='assets/images/down_arrow.png')
+.homepage.blue_bg.wallet.hide
+  .container.wallet_bg
+    .row
+      .col-lg-12
+        .text_img_panel
+          .text_panel
+            h2.text-center Proud Sponsors of 247Buddy
+            h4.text-center Our motto is to be advertisement free but we are always looking for sponsors who believe in us. You can contact us on contactus@247buddy.net
+    .row
+      .col-lg-8.col-md-8.col-sm-8.col-xs-12
+        .row
+          div(ng-if="$ctrl.sponsors.length",ng-repeat="sponsor in $ctrl.sponsors | limitTo:3")
+            .col-lg-4.col-md-4.col-sm-4.col-xs-12
+              .img_panel
+                img(src="{{sponsor.image_url}}")
+
+          .col-lg-12
+            button.hide.blue_button(ui-sref="contact") Contact us to sponsor
+      .col-lg-4.col-md-4.col-sm-4.col-xs-12
+        .img_box
+          img(src="assets/images/wallet.png")

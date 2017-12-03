@@ -1,0 +1,142 @@
+.container-fluid.header_chat
+  .row
+    .col-lg-12
+      .logo_with_name
+        img.receiver-display-img(src='/assets/images/teller-display-icon.png' ng-if='$ctrl.role=="venter"')
+        img.receiver-display-img(src='/assets/images/listener-display-icon.png' ng-if='$ctrl.role=="listener"')
+        p.hidden-xs
+          span.status(ng-if='$ctrl.role=="venter"') You are expressing yourself.
+          span.status(ng-if='$ctrl.role=="listener"') You are listening to someone.
+      .medal_setting
+        // Button trigger modal
+        button.btn.btn-default.btn-lg.medal(ng-click="$ctrl.showBadge()")
+          img(src='assets/images/medal.png')
+        .setting.dropdown(uib-dropdown)
+          button#dropdownMenu1.btn.btn-default.dropdown-toggle(uib-dropdown-toggle)
+            img(src='assets/images/show_more.png')
+          ul.dropdown-menu(uib-dropdown-menu)
+            li(ng-if="$ctrl.role!='listener'")
+              a(ng-click="$ctrl.clearMessages()") Clear Chat
+            li
+              a(ng-click="$ctrl.reportUser()") Report
+            li
+              a(ui-sref="home-ip") Start a new chat
+        a.hide.add-chat-icon(ui-sref="home-ip") +
+  .row
+    .notification_center.alert.animate-show(class="alert-{{$ctrl.growlB.gType}}" ng-show='$ctrl.growlB.msg') 
+      | {{$ctrl.growlB.msg}}
+      p(ng-if='$ctrl.growlB.extra.hello') Say hello
+      div(ng-if='!$ctrl.growlB.extra.report')
+        p(ng-if='$ctrl.growlB.extra.self_disconnect')
+          | Please wait we are trying to reconnect.
+          br
+          | If you are having connection issues frequently.You can submit an issue 
+          a(href="https://www.reddit.com/r/247buddy/comments/73ttct/247buddy_report_issues_here/" target="_blank") here.
+        p(ng-if='$ctrl.growlB.gType=="danger"')
+          | If you had a good conversation consider giving a 
+          a(ng-click="$ctrl.showBadge()") badge.
+        p(ng-if='$ctrl.growlB.gType=="danger"')
+          | You can post a missed connection 
+          a(href="https://www.reddit.com/r/247buddy/submit?selftext=true&title=247buddy%20Missed%20Connections" target="_blank") here
+          | or 
+          a(href="https://twitter.com/intent/tweet?hashtags=247buddy") Tweet #247buddy
+      p(ng-if='$ctrl.growlB.extra.new_chat') 
+        a(ui-sref="home-ip") Start a new chat
+      p(ng-if='$ctrl.growlB.extra.err_msg') {{$ctrl.growlB.extra.err_msg}}
+      
+
+
+.chat-history(ng-class='{"listner_container":$ctrl.role=="listener",venter_container:$ctrl.role=="venter"}')
+  ul
+    li.text-center
+      h5
+        .label.label-info(ng-if='$ctrl.timeSinceChat') {{$ctrl.timeSinceChat | date:'d MMM'}} {{$ctrl.timeSinceChat | date:'shortTime'}}
+    li(ng-repeat='message in $ctrl.messages | filter: { hidden: false }' ng-class='{"listner_msg":message.role=="listener",venter_msg:message.role=="venter"}', )
+      .chat_partner_pic
+      p
+        | {{message.text}}
+        span.time_stamp {{message.time.formatAMPM()}}
+  
+
+.pr
+  .loader_block.small_loader(ng-show="$ctrl.partnerTyping")
+    ul.loader_box
+      li.loader_circle
+      li.loader_circle
+      li.loader_circle
+      li.loader_circle
+      li.loader_circle
+
+  form.chat-message.clearfix(ng-submit="$ctrl.sendMessage();")
+    //- fieldset(ng-disabled="$ctrl.disconnected")
+    fieldset
+      textarea.chat-send-area(typing="$ctrl.isTyping" ng-keyup="$event.keyCode == 13 && $ctrl.sendMessage() && $event.preventDefault()" placeholder='Type your message here' rows='3' ng-model="$ctrl.messageToSend" required ng-disabled="$ctrl.disconnected")
+      button.send_btn
+
+
+.modal.ng-scope(ng-class="{'ng-show':$ctrl.showReport}")
+  .modal-dialog
+    .modal-content
+      .modal-header
+        h3 Report this user:
+      .modal-body
+          form.clearfix(ng-submit="$ctrl.sendReport();")
+            fieldset
+              .container-fluid
+                .row
+                  .col-lg-12
+                    ul
+                      li We are sorry to hear that you had a bad experience during this conversation.
+                      li Report a user only if he is trolling, looking for sex, spamming or reasons you can justify.
+                      li Your IP address, this chat and your partner's IP address will be recorded for moderation purpose. Please read our privacy policy for more details.
+                .row
+                  textarea.form-control(placeholder='Specify the reason why you want to report the user.' ng-model="$ctrl.reason" rows='3' required)
+      .modal-footer
+        button.secondary_button(ng-click="$ctrl.showReport=false") Cancel
+        button.blue_button(ng-click="$ctrl.sendReport();$ctrl.showReport=false") Report
+
+
+.modal.ng-scope(ng-class="{'ng-show':$ctrl.showBadges}")
+  .modal-dialog
+    .modal-content
+      .modal-header
+        h3 Like 247Buddy?  Donate with a badge!
+      .modal-body
+        form.clearfix.ng-pristine.ng-invalid.ng-invalid-required(ng-submit='$ctrl.createBadge();')
+          fieldset
+            .container-fluid
+              .row
+                .col-lg-12
+                  p
+                    span.title 247Buddy is free to use but if you had a good conversation with your buddy, you can buy a badge to support us.
+              .row
+                .col-lg-4.col-md-4.col-sm-4.col-xs-12
+                  .badge_card.golden_card(ng-class='{active:"gold"==$ctrl.badgeType}' ng-click='$ctrl.badgeType="gold"')
+                    .badge_header Golden
+                    .badge_content
+                      img(src='assets/images/golden_medal.png', alt='Golden')
+                      p 5$
+                .col-lg-4.col-md-4.col-sm-4.col-xs-12
+                  .badge_card.silver_card(ng-class='{active:"silver"==$ctrl.badgeType}' ng-click='$ctrl.badgeType="silver"')
+                    .badge_header Silver
+                    .badge_content
+                      label
+                        img(src='assets/images/silver_medal.png', alt='Silver')
+                      p 2$
+                .col-lg-4.col-md-4.col-sm-4.col-xs-12
+                  .badge_card.bronze_card(ng-class='{active:"bronze"==$ctrl.badgeType}' ng-click='$ctrl.badgeType="bronze"')
+                    .badge_header Bronze
+                    .badge_content
+                      label
+                        img(src='assets/images/bronze_medal.png', alt='Bronze')
+                      p 1$
+              .row
+                .col-lg-12
+                  p
+                    span.title *Please make sure popups are allowed, for the paypal payment process to continue. 
+
+                .col-lg-12
+                  textarea.form-control.ng-pristine.ng-untouched.ng-empty.ng-invalid.ng-invalid-required(placeholder='Your Comment here...', ng-model='$ctrl.badgeMessage', rows='3', required='required')
+      .modal-footer
+        button.secondary_button(ng-click='$ctrl.showBadges=false') Cancel
+        button.blue_button(ng-click='$ctrl.createBadge();$ctrl.showBadges=false') Donate Now

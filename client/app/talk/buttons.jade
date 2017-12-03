@@ -1,0 +1,32 @@
+.container-fluid.blue_bg_img
+  .container
+    .row.role_selection
+      .col-lg-8.col-md-8.col-sm-12.col-xs-12.col-lg-push-2.col-md-push-2
+        .title_description
+          h4(ng-show='$ctrl.globalInfo.conversationCount') Ongoing conversations: {{$ctrl.globalInfo.conversationCount}} 
+          p(ng-if="$ctrl.waitCount==0")  Nobody is waiting.
+          p(ng-if="$ctrl.waitCount==1")  There is someone who can listen to you...
+          p(ng-if="$ctrl.waitCount==-1")  There is someone who needs to be heard...
+          p(ng-if="$ctrl.waitCount>1")  There are {{$ctrl.waitCount}} people on hold ready to listen ...
+          p(ng-if="$ctrl.waitCount<-1")  There are {{$ctrl.waitCount*-1}} people who want to be heard...
+          
+        .row
+          .col-lg-4.col-md-4.col-sm-5.col-xs-6
+            .role
+              .img_box
+                img(src='assets/images/listner.png')
+              button.blue_button(ng-click='$ctrl.findPair("listener")') Listen to someone
+          .col-lg-4.col-md-4.col-sm-2.col-xs-2.hidden-xs
+          .col-lg-4.col-md-4.col-sm-5.col-xs-6
+            .role
+              .img_box
+                img(src='assets/images/teller.png')
+              button.blue_button(ng-click='$ctrl.findPair("venter")') Express yourself
+        .row
+          p.text-center
+            | Do you want to listen but hate seeing the loading page, join our 
+            a(href="https://discord.gg/57JZugd") discord servers
+            br
+            | Our bot will notify if there are any unattended venters on hold.
+
+

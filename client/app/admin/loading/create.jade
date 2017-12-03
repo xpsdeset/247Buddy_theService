@@ -1,0 +1,13 @@
+.container
+    form.col-md-12.form-horizontal(name="loadingForm",ng-submit="loading_create_ctrl.createloading()",enctype="multipart/form-data")
+        .form-group
+            label.col-md-3(for='image') Image
+            .col-md-8
+                input.form-control(type='file', ngf-select='', ng-model='loading_create_ctrl.loading.picFile', name='filedata', accept='image/*', ngf-max-size='2MB', required='', ngf-model-invalid='errorFile')
+        .form-group
+            label.col-md-3(for='image') Caption
+            .col-md-8
+                input.form-control(ng-model='loading_create_ctrl.loading.caption')
+        .form-actions
+            button.btn.btn-default(ui-sref='admin.loading.list') Cancel
+            button.btn.btn-danger Create Loading Image

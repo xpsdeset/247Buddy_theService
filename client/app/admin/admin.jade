@@ -1,0 +1,14 @@
+div(growl)
+.container
+    .well.well-sm
+        ul.nav.nav-pills
+            li(ui-sref='admin.sponsor.list' ui-sref-active="{'active': 'admin.sponsor.**'}")
+                a Sponsors
+            li(ui-sref='admin.badge.list' ui-sref-active="{'active': 'admin.badge.**'}")
+                a Badges
+            li(ui-sref='admin.report.list' ui-sref-active="{'active': 'admin.report.**'}")
+                a Report
+            li(ui-sref='admin.loading.list' ui-sref-active="{'active': 'admin.loading.**'}")
+                a Loading Images
+    .well.well-sm
+        ui-view

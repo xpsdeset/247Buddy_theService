@@ -1,0 +1,10 @@
+.container
+    h3 Access Denied 
+    h4 Sorry, we have received too many violations from your IP address
+    form.hide.clearfix(ng-if="$ctrl.reported == false",ng-submit="$ctrl.sendReportRequest();")
+        fieldset
+        p
+            textarea(placeholder='Text here...' ng-model="$ctrl.reportMessage" rows='3' required)
+        p
+            button Send
+    h3(ng-if="$ctrl.reported == true") Thanks for Using Compassion Pot. Your request has been sent to admin. We will get back to you soon!!!

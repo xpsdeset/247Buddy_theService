@@ -1,0 +1,21 @@
+.row
+  .col-lg-12
+    table#pickle.table.table-hover.table-striped.table-bordered(ng-show="sponsor_list_ctrl.sponsorList.length")
+      thead
+        tr
+          th Name
+          th Website
+          th Img
+          th Remove
+      tbody
+        tr(ng-repeat='sponser in sponsor_list_ctrl.sponsorList')
+          td {{sponser.name}} ({{sponser.amount}})
+          td {{sponser.website}}
+          td
+            img.size100(src='{{sponser.image_url}}')
+          td
+            a(ng-click='sponsor_list_ctrl.delete(sponser,$index)') x 
+    .alert.alert-info(ng-show="!sponsor_list_ctrl.sponsorList.length") No sponsors
+.row
+  .col-lg-12
+    button.btn.btn-danger(ui-sref='admin.sponsor.create') Create Sponsors

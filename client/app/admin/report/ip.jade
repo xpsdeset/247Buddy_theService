@@ -1,0 +1,13 @@
+table.table(ng-show="report_list_ctrl.ipSummary.length")
+  thead
+    tr
+      th IP
+      th 
+  tbody
+    tr(ng-repeat='ip in report_list_ctrl.ipSummary track by $index' ng-class='{danger:ip.banned}')
+      td.col-md-6 
+        a(ng-click='report_list_ctrl.showReport(ip)') {{ip.ip}}
+      td.col-md-6 
+        uib-progressbar.progress-striped.active(value="ip.value" type="{{ip.type}}") {{ip.count}}
+.alert.alert-info(ng-show="!report_list_ctrl.ipSummary.length") No banned users so far
+

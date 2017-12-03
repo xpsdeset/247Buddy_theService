@@ -1,0 +1,28 @@
+nav
+  div.hidden-xs(ng-controller='NavbarController')
+    .navbar-header
+      button.navbar-toggle.collapsed(type='button', data-toggle='collapse', aria-expanded='false',ng-click='nav.isCollapsed = !nav.isCollapsed')
+        span.sr-only Toggle navigation
+        span.icon-bar
+        span.icon-bar
+        span.icon-bar
+      a.navbar-brand(ui-sref='index')
+        img.logo(alt='Brand', src='/assets/images/logo2.png')
+        label 247Buddy
+    #navbar-main.collapse.navbar-collapse(uib-collapse='nav.isCollapsed')
+      ul.nav.navbar-nav.hide
+        li
+          a(ui-sref="home-ip") Find your buddy
+        li
+          a(href='#') Missed connections
+          
+      //- ul.nav.navbar-nav.navbar-right.hide
+
+      //-     li(ng-show='nav.isAdmin()',ng-hide='nav.isLoggedIn()', ui-sref-active='active')
+      //-       a(ui-sref='login') Login
+
+      //-     li(ng-show='nav.isAdmin()')
+      //-       p.navbar-text Hello {{ nav.getCurrentUser().name }}
+
+      //-     li(ng-show='nav.isAdmin()')
+      //-       a(ui-sref='logout') Logout

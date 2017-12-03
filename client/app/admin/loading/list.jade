@@ -1,0 +1,17 @@
+.row
+  .col-lg-12
+    table#pickle.table.table-hover.table-striped.table-bordered(ng-show="loading_list_ctrl.loadingList.length")
+      thead
+        tr
+          th Img
+          th Remove
+      tbody
+        tr(ng-repeat='loaders in loading_list_ctrl.loadingList track by $index')
+          td
+            img.size100(src='{{loaders.image_url}}')
+          td
+            a(ng-click='loading_list_ctrl.delete(loaders,$index)') x
+    .alert.alert-info(ng-show="!loading_list_ctrl.loadingList.length") No loading Images
+.row
+  .col-lg-12
+    button.btn.btn-danger(ui-sref='admin.loading.create') Create loading Images

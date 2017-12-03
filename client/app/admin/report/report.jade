@@ -1,0 +1,28 @@
+h2 
+    | Reported IP : {{report_list_ctrl.selected.ip}}
+    button.btn.btn-default.pull-right(ng-show='!report_list_ctrl.selected.banned' ng-click='report_list_ctrl.banIp()') Ban 
+    button.btn.btn-danger.pull-right(ng-show='report_list_ctrl.selected.banned') Banned 
+
+table.table(ng-show="report_list_ctrl.reports.length")
+    thead
+        tr
+            th IP
+            th Role
+            th Reason
+            th Time
+            th Remove
+    tbody
+        tr(ng-repeat='report in report_list_ctrl.reports')
+            td {{report.reportIp}}
+            td {{report.role}}
+            td 
+                | {{report.reason}}
+                button.btn.btn-default(ng-click="report_list_ctrl.showSingleChat(report)")
+                    i.fa.fa-weixin
+            td {{report.time}}
+            td
+                a(ng-click='report_list_ctrl.deleteChat(report,$index)') x 
+                
+.alert.alert-info(ng-show="!report_list_ctrl.reports.length") No report data present
+    
+button.btn.btn-default(ng-click="report_list_ctrl.state = 'show-ip'") Back

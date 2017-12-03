@@ -1,0 +1,21 @@
+.container
+    form.col-md-12.form-horizontal(name="sponsorForm",ng-submit="sponsor_create_ctrl.createsponsor()",enctype="multipart/form-data")
+        .form-group
+            label.col-md-3(for='name') Name
+            .col-md-8
+                input.form-control(type='text', ng-model='sponsor_create_ctrl.sponsor.name', required)
+        .form-group
+            label.col-md-3(for='website') Website
+            .col-md-8
+                input.form-control(type='text',  ng-model='sponsor_create_ctrl.sponsor.website', required)
+        .form-group
+            label.col-md-3(for='amount') Amount
+            .col-md-8
+                input.form-control(type='text',  ng-model='sponsor_create_ctrl.sponsor.amount', required)
+        .form-group
+            label.col-md-3(for='image') Image
+            .col-md-8
+                input.form-control(type='file', ngf-select='', ng-model='sponsor_create_ctrl.sponsor.picFile', name='filedata', accept='image/*', ngf-max-size='2MB', required='', ngf-model-invalid='errorFile')
+        .form-actions
+            button.btn.btn-default(ui-sref='admin.sponsor.list') Cancel
+            button.btn.btn-danger Create Sponsor

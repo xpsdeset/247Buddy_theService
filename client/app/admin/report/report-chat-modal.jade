@@ -1,0 +1,7 @@
+.modal(ng-class="{'ng-show':report_list_ctrl.showincidentChatModal}")
+  .modal-dialog
+    .modal-content
+      .modal-body
+        p(ng-repeat='data in report_list_ctrl.incidentChat track by $index') {{data.role}} : {{data.text}}
+      .modal-footer
+        button.btn.btn-default(ng-click="report_list_ctrl.showincidentChatModal=false") Close

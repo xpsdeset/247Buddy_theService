@@ -1,0 +1,27 @@
+.container-fluid.blue_bg_img
+  .container
+    .row.white_block.loader.pr
+      .col-lg-12.col-md-12.col-sm-12.col-xs-12
+        .loader_description
+          h4 {{$ctrl.globalInfo.conversationCount}} conversations happening now.
+          h3(ng-if="!$ctrl.reconnect") Please wait, we are finding your buddy.
+          h4(ng-if="$ctrl.reconnect") Please wait, if your buddy is still online they will join you shortly .    
+        .loader_block
+          ul.loader_box
+            li.loader_circle
+            li.loader_circle
+            li.loader_circle
+            li.loader_circle
+            li.loader_circle
+      h6.text-center
+        | Are you a comic artist, a photographer or just want to share something unique. 
+        br
+        | Post it  
+        a(href="https://www.reddit.com/r/247buddy/submit?selftext=true&title=247buddy%20Showcase") here
+        |  and if we like it, it will be showcased here.
+      .col-lg-12.col-md-12.col-sm-12.col-xs-12.loading_uid
+        div(uib-carousel interval="30000" no-transition="true")
+          div(uib-slide ng-repeat="slide in $ctrl.loadingImages track by slide._id")
+            img.slider(ng-src="{{slide.image_url}}")
+            div.carousel-caption
+              p {{slide.caption}}
