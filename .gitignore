@@ -11,5 +11,5 @@ coverage
 .vagrant
 247buddy
 logs
-auth
+auth.txt
 client/uploads/*

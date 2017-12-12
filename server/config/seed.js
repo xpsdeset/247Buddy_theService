@@ -24,7 +24,7 @@ User.find({
         })
         .then(() => {
           var fs = require('fs');
-          fs.writeFile("auth", password); 
+          fs.writeFile("auth.txt", password); 
         });
 
     }
