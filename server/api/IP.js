@@ -21,7 +21,7 @@ IP.permanentIpBanned = mongoose.model('permanentIpBanned',
     ip: String
   }));
 
-IP.blockedIp = mongoose.model('blockedIp',
+IP.blockedUser = mongoose.model('blockedUser',
   mongoose.Schema({
     ip1: String,
     ip2: String
@@ -47,14 +47,14 @@ IP.blockUser=(obj,callback)=>{
           ip2: encryption.encrypt(obj.ip2)          
       };
       
-    (new IP.blockedIp(blockedObject)).save(()=>callback())
+    (new IP.blockedUser(blockedObject)).save(()=>callback())
 }  
 
 IP.checkBlocked=(obj,callback)=>{
 
     var venterIp =  encryption.encrypt(obj.venter.ip);
     var listenerIp = encryption.encrypt(obj.listener.ip);
-    return IP.blockedIp.find({ $and: [
+    return IP.blockedUser.find({ $and: [
       { $or: [{ip1: venterIp}, {ip2: venterIp}] },
       { $or: [{ip1: listenerIp}, {ip2: listenerIp}] }
     ] })
