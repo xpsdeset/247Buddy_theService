@@ -21,6 +21,12 @@ IP.permanentIpBanned = mongoose.model('permanentIpBanned',
     ip: String
   }));
 
+IP.blockedIp = mongoose.model('blockedIp',
+  mongoose.Schema({
+    ip1: String,
+    ip2: String
+  }));
+
 
 IP.reportIncident=(obj,callback)=>{
     var bannedObject = {
@@ -33,6 +39,29 @@ IP.reportIncident=(obj,callback)=>{
         };
 
     (new IP.reportIncidentModel(bannedObject)).save(()=> callback() )
+}  
+
+IP.blockUser=(obj,callback)=>{
+  var blockedObject = {
+          ip1: encryption.encrypt(obj.ip1),
+          ip2: encryption.encrypt(obj.ip2)          
+      };
+      
+    (new IP.blockedIp(blockedObject)).save(()=>callback())
+}  
+
+IP.checkBlocked=(obj,callback)=>{
+
+    var venterIp =  encryption.encrypt(obj.venter.ip);
+    var listenerIp = encryption.encrypt(obj.listener.ip);
+    return IP.blockedIp.find({ $and: [
+      { $or: [{ip1: venterIp}, {ip2: venterIp}] },
+      { $or: [{ip1: listenerIp}, {ip2: listenerIp}] }
+    ] })
+    .then(function (rec) {
+        return !rec.length >0;
+        
+    });    
 }  
 
 IP.checkBannedIp=(ip,callback)=>{

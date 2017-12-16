@@ -34,7 +34,7 @@ export default function (socketio) {
       return partner || {emit:function(){},notAvilable:true}
     }
 
-    socket.on('find-pair', role => {
+    socket.on('find-pair', async(role) => {
       socket.role = role;
       socket.roomId=role;
 
@@ -43,7 +43,7 @@ export default function (socketio) {
         pair[role] = socket;
         var partnerRole=partnerKey[role];
         pair[partnerRole]=allSockets().find(s => s.roomId == partnerRole);
-        if(pair[partnerRole])
+        if(pair[partnerRole] && await IP.checkBlocked(pair))
             {
               RoomInfo.create(pair, notifications);
               notifications.clearIdle(pair.venter);
@@ -55,6 +55,7 @@ export default function (socketio) {
       globalInfo();
 
     });
+
 
     socket.on('reconnect-to-room', eInfo => {
 
@@ -174,11 +175,6 @@ export default function (socketio) {
       });
     }
 
-    
-
-
-
-
     socket.on('is-typing', (isTyping) => {
       socketio.to(socket.roomId).emit('partner-typing', {
         role: socket.role,
@@ -207,6 +203,13 @@ export default function (socketio) {
       IP.reportIncident(bannedObject,()=>socket.emit('incident-recorded'))
 
     });
+    socket.on('block-user', () => {
+            var blockObject = {
+              ip1: socket.partnerIp,
+              ip2: socket.ip
+            };
+            IP.blockUser(blockObject,()=>socket.emit('user-blocked'))
+          });
 
   
 
