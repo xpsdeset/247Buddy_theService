@@ -20,7 +20,12 @@
               | Or
               br
               | You can give your time to someone who wants to be heard.
-            button.blue_button(ui-sref="home-ip") Find your Buddy
+            .clearfix
+            button.btn_space.blue_button.pull-left(ui-sref="home-ip") Find your Buddy
+            a.btn_space.pull-left(href='https://play.google.com/store/apps/details?id=com.xbsdeset.buddy247&hl=en')
+              img(src='https://upload.wikimedia.org/wikipedia/commons/c/cd/Get_it_on_Google_play.svg')
+            div.btn_space.pull-left(ng-include='"app/index/paypal.html"')
+
           .img_panel
             img(src='assets/images/laptop_with_hand.png')
           .down_arrow.hide
