@@ -20,7 +20,9 @@ This project was generated with the [Angular Full-Stack Generator](https://githu
 
 3. Run `mongod` in a separate shell to keep an instance of the MongoDB Daemon running
 
-4. Run `gulp serve` to start the development server. It should automatically open the client in your browser when ready.
+4. Make a copy of `.sample_env` and name it `.env`. This file is usually used to set paypal credentials and encryption secret. 
+
+5. Run `gulp serve` to start the development server. It should automatically open the client in your browser when ready.
 
 ## Build & development
 
