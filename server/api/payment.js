@@ -19,7 +19,7 @@ var badgeModel = mongoose.model('badgeModel',mongoose.Schema({
 }));
 
 
-var paypal = Paypal.init(process.env.PAYPAL_EMAIL, process.env.PAYPAL_PASSWORD, process.env.PAYPAL_SIGNATURE, process.env.PAYPAL_SUCCESS, process.env.PAYPAL_FAILURE, process.env.PAYPAL_SANDBOX);
+var paypal = Paypal.init(process.env.PAYPAL_EMAIL, process.env.PAYPAL_PASSWORD, process.env.PAYPAL_SIGNATURE, process.env.PAYPAL_SUCCESS, process.env.PAYPAL_FAILURE, process.env.PAYPAL_SANDBOX=="true");
 
 paypal.solutiontype='Sole';
 
