@@ -4,7 +4,7 @@ import crypto from 'crypto';
 import shortid from 'shortid';
 
 var algorithm = 'aes-256-ctr',
-    password = 'setyourencryptionkeyhere';
+    password = process.env.ENCRYPTION_PASSWORD;
 
 var enc = {};
 enc.encrypt = function(text) {

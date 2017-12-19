@@ -3,6 +3,7 @@ import encryption from '../encryption';
 import Paypal from 'paypal-express-checkout';
 import config from '../config/environment';
 
+
 //Refer https://github.com/totaljs/node-paypal-express-checkout
 
 var payment = {};
@@ -18,7 +19,7 @@ var badgeModel = mongoose.model('badgeModel',mongoose.Schema({
 }));
 
 
-var paypal = Paypal.init(config.paypal.email, config.paypal.password, config.paypal.signature, config.paypal.successUrl, config.paypal.failureUrl, config.paypal.sandbox);
+var paypal = Paypal.init(process.env.PAYPAL_EMAIL, process.env.PAYPAL_PASSWORD, process.env.PAYPAL_SIGNATURE, process.env.PAYPAL_SUCCESS, process.env.PAYPAL_FAILURE, process.env.PAYPAL_SANDBOX);
 
 paypal.solutiontype='Sole';
 

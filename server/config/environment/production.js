@@ -22,14 +22,7 @@ module.exports = {
           'mongodb://localhost/247'
   },
 
-   paypal: {
-    email:'',
-    password:'',
-    signature:'',
-    sandbox:false,
-    successUrl:'http://247buddy.net/api/paypal/payment',
-    failureUrl:'http://247buddy.net/api/paypal/payment'
-  },
+   
   seedDB: true
 };
 

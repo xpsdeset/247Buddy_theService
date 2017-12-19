@@ -1,5 +1,5 @@
 'use strict';
-
+require('dotenv').load();
 var path = require('path');
 var _ = require('lodash');
 

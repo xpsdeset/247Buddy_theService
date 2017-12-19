@@ -13,3 +13,4 @@ coverage
 logs
 auth.txt
 client/uploads/*
+.env
