@@ -4,8 +4,8 @@ import deviceTokens from './deviceTokens';
 import encryption from '../encryption';
 
 var discord={
-    token: "Mzc5NTM5OTc5MzE3MTQ5Njk2.DOrhtg.hKIKccMEZbZxlSlScVuEgNJKLc4",
-    channel:"379563259449049089"
+    token: process.env.DISCORD_TOKEN,
+    channel: process.env.DISCORD_CHANNEL
 }
 
 discord.Bot = new Discord.Client({
@@ -15,19 +15,22 @@ discord.Bot = new Discord.Client({
 
 
 
+
 var notifications={};
 
 notifications.notifyOnIdle= (socket)=>{
     
-    var oneMinute=60000;
+    var oneMinute=6000;
     socket.idleTime=1;
     socket.interValId=setInterval(
         async()=>{
         var msg = `There is a venter waiting since ${socket.idleTime} minute(s).`;
         var tokens = await deviceTokens.getTokens(socket)
 
-        if (socket.idleTime%3==1)
-            notifications.expoNotify(msg, tokens )
+
+        // if (socket.idleTime%3==1)
+        //     notifications.expoNotify(msg, tokens )
+        
         discord.Bot.sendMessage({
             to: discord.channel,
             message: `${msg}
