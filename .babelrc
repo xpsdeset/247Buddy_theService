@@ -1,4 +1,4 @@
 {
-    "presets": ["es2015"],
-    "plugins": ["transform-class-properties","async-to-promises"]
+    "presets": ["latest"],
+    "plugins": ["transform-class-properties"]
 }
