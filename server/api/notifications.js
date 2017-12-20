@@ -20,7 +20,7 @@ var notifications={};
 
 notifications.notifyOnIdle= (socket)=>{
     
-    var oneMinute=6000;
+    var oneMinute=60000;
     socket.idleTime=1;
     socket.interValId=setInterval(
         async()=>{
