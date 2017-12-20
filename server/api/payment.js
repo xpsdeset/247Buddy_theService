@@ -38,6 +38,10 @@ payment.initPayPal= (badge,callBack)=>{
 
 payment.route = function(app) {
 
+    app.get('/api/direct_donate', function (req, res) {
+        res.redirect(process.env.PAYPAL_DONATE_LINK);
+    });
+
 
     app.get('/api/badge/list', function(req, res) {
         badgeModel.find({},{},{ sort: { 'time' : -1 }}, function(err, data) {
