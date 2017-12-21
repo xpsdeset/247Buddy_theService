@@ -54,7 +54,6 @@ notifications.expoNotify = (msg, tokens) => {
 
     
     tokens = tokens.map(d=>encryption.decrypt(d))
-    console.log(tokens);
 
     let expo = new Expo();
     let messages = [];

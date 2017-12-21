@@ -132,12 +132,7 @@ let transpileClient = lazypipe()
     .pipe(plugins.babel)
 
 let transpileServer = lazypipe()
-    .pipe(plugins.babel, {
-        plugins: [
-            'transform-class-properties',
-            'transform-runtime'
-        ]
-    })
+    .pipe(plugins.babel)
 
 let mocha = lazypipe()
     .pipe(plugins.mocha, {
@@ -369,7 +364,7 @@ gulp.task('serve', cb => {
     runSequence(['clean:tmp', 'constant', 'env:all'],
         [ 'inject', 'jade'],
         ['wiredep:client'],
-        ['transpile:server' ,'transpile:client', 'styles'],
+        ['transpile:client', 'styles'],
         ['start:server', 'start:client'],
         'watch',
         cb);
@@ -490,7 +485,7 @@ gulp.task('build', cb => {
         cb);
 });
 
-gulp.task('clean:dist', () => del([`dist/server`,'dist/*.*','dist/client/*.*','dist/client/{app,assets,bower_components}/**'], {dot: true}));
+gulp.task('clean:dist', () => del([`dist/server`,'dist/package.json','dist/client/*.*','dist/client/{app,assets,bower_components}/**'], {dot: true}));
 
 gulp.task('build:client', ['styles', 'html', 'constant', 'build:images'], () => {
     var manifest = gulp.src(`${paths.dist}/${clientPath}/assets/rev-manifest.json`);
