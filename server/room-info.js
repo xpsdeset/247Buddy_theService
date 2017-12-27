@@ -12,8 +12,6 @@ import encryption from './encryption';
 
 
 
-var algorithm = 'aes-256-ctr',
-    password = 'dafaqq';
 
 
 var RoomInfo = {};

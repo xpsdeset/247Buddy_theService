@@ -62,9 +62,10 @@ export default function (socketio) {
       try {
         var roomInfo = RoomInfo.getPariInfo(eInfo,socket);
         
-      socket.roomId = roomInfo.roomId;
-      socket.role = roomInfo.role;
-      socket.join(socket.roomId);
+        socket.roomId = roomInfo.roomId;
+        socket.role = roomInfo.role;
+        socket.join(socket.roomId);
+        roomInfo.roomId=eInfo;
       socket.isPaired = true;
       var partner=socket.partner();
       if(!partner.notAvilable)

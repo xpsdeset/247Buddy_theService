@@ -32,3 +32,8 @@ Running `npm test` will run the unit tests with karma.
 
 Running `sudo ./utils/setup.sh` will setup mongo,node,nginx onto ubuntu
 Running `sudo ./utils/deploy.sh` will deploy 247buddy 
+
+Below commands maybe needed if the build doesn't work
+ 
+    npm install node-sass
+    npm rebuild
