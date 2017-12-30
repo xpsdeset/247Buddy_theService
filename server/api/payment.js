@@ -39,7 +39,8 @@ payment.initPayPal= (badge,callBack)=>{
 payment.route = function(app) {
 
     app.get('/api/direct_donate', function (req, res) {
-        res.redirect(process.env.PAYPAL_DONATE_LINK);
+        // res.redirect(process.env.PAYPAL_DONATE_LINK);
+        res.redirect('/');
     });
 
 

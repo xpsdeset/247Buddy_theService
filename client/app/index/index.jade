@@ -22,9 +22,11 @@
               | You can give your time to someone who wants to be heard.
             .clearfix
             button.btn_space.blue_button.pull-left(ui-sref="home-ip") Find your Buddy
+            a.btn_space.pull-left(href='https://itunes.apple.com/us/app/247buddy/id1321993865?ls=1&mt=8')
+              img(src='assets/images/badge-download-on-the-app-store.svg')
             a.btn_space.pull-left(href='https://play.google.com/store/apps/details?id=com.xbsdeset.buddy247&hl=en')
               img(src='https://upload.wikimedia.org/wikipedia/commons/c/cd/Get_it_on_Google_play.svg')
-            div.btn_space.pull-left(ng-include='"app/index/paypal.html"')
+            div.hide.btn_space.pull-left(ng-include='"app/index/paypal.html"')
 
           .img_panel
             img(src='assets/images/laptop_with_hand.png')

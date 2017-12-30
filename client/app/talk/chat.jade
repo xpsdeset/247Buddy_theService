@@ -9,7 +9,7 @@
           span.status(ng-if='$ctrl.role=="listener"') You are listening to someone.
       .medal_setting
         // Button trigger modal
-        button.btn.btn-default.btn-lg.medal(ng-click="$ctrl.showBadge()")
+        button.btn.btn-default.btn-lg.medal.hide(ng-click="$ctrl.showBadge()")
           img(src='assets/images/medal.png')
         .setting.dropdown(uib-dropdown)
           button#dropdownMenu1.btn.btn-default.dropdown-toggle(uib-dropdown-toggle)
@@ -32,7 +32,7 @@
           br
           | If you are having connection issues frequently.You can submit an issue 
           a(href="https://www.reddit.com/r/247buddy/comments/73ttct/247buddy_report_issues_here/" target="_blank") here.
-        p(ng-if='$ctrl.growlB.gType=="danger"')
+        p.hide(ng-if='$ctrl.growlB.gType=="danger"')
           | If you had a good conversation consider giving a 
           a(ng-click="$ctrl.showBadge()") badge.
         p(ng-if='$ctrl.growlB.gType=="danger"')
