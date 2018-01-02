@@ -3,7 +3,11 @@
 git pull
 # npm install 
 # bower install  --allow-root
-gulp build
+
+if [ -z "$1" ]
+  then
+    gulp build
+fi
 
 export NODE_ENV=production
 export SKIP_ASSETS=true
