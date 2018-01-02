@@ -20,6 +20,9 @@ var notifications={};
 
 notifications.notifyOnIdle= (socket)=>{
     
+    if (!socket.connected)
+        return notifications.clearIdle(socket)
+        
     var oneMinute=60000;
     socket.idleTime=1;
     socket.interValId=setInterval(
