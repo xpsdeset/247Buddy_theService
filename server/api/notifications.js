@@ -30,6 +30,11 @@ notifications.notifyOnIdle= (socket)=>{
         var msg = `There is a venter waiting since ${socket.idleTime} minute(s).`;
         var tokens = await deviceTokens.getTokens(socket)
 
+        if (!socket.idleTime > 5)
+            return notifications.clearIdle(socket)
+
+        
+
 
         // if (socket.idleTime%3==1)
         //     notifications.expoNotify(msg, tokens )
