@@ -26,6 +26,7 @@
     "method-override": "^2.3.5",
     "mongoose": "^4.11.12",
     "morgan": "~1.7.0",
+    "node-cron": "^1.2.1",
     "passport": "~0.3.0",
     "passport-local": "^1.0.0",
     "paypal-express-checkout": "^1.6.1",
