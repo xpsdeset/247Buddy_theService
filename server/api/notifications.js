@@ -54,28 +54,24 @@ notifications.clearIdle = (socket) => {
 }
 
 
-notifications.expoNotify = (msg, tokens) => {
-
-    
-    tokens = tokens.map(d=>encryption.decrypt(d))
+notifications.expoNotify = (tokensMsg) => {
 
     let expo = new Expo();
-    let messages = [];
-    for (let pushToken of tokens) {
-        if (!Expo.isExpoPushToken(pushToken)) {
-            console.error(`Push token ${pushToken} is not a valid Expo push token`);
-            continue;
+    let messages= [];
+    
+
+    tokensMsg.forEach(d => {
+        d.to = encryption.decrypt(d.token) 
+        d.ttl= 20;
+        if (!Expo.isExpoPushToken(d.to)) {
+            console.error(`Push token ${d.to} is not a valid Expo push token`);
         }
+        else
+            delete d.token
+    })
 
-        messages.push({
-            to: pushToken,
-            body: msg,
-            ttl: 20,
-            data: {  }
-        })
-    }
 
-    let chunks = expo.chunkPushNotifications(messages);
+    let chunks = expo.chunkPushNotifications(tokensMsg);
 
     (async () => {
         for (let chunk of chunks) {
@@ -83,6 +79,7 @@ notifications.expoNotify = (msg, tokens) => {
                 let receipts = await expo.sendPushNotificationsAsync(chunk);
                 // console.log(receipts);
             } catch (error) {
+                console.error('error');
                 console.error(error);
             }
         }

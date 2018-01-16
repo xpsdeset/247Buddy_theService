@@ -31,7 +31,6 @@ token.addVenterToken= (socket) =>{
 token.getVenterWaitingTokens = async (socket) => {
   try {
     var tokens = await venterTokenModel.find({}, 'token')
-    console.log(tokens)
     return tokens.map(d => d.token)
     
   } catch (error) {

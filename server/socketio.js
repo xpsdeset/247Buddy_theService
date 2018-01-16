@@ -15,15 +15,18 @@ import cron from './api/cron';
 
 
 
-cron.bootcron();
 
 export default function (socketio) {
-
-
-
+  
+  
+  var allSockets = () => _.values(socketio.sockets.sockets);
+  var ventingUsers = () => allSockets().find(s => s.roomId == 'venter' && !s.deviceToken )
+  
+  cron.bootcron(ventingUsers);
+  
   socketio.on('connection', function (socket) {
+  
 
-    var allSockets = () => _.values(socketio.sockets.sockets);
     var partnerKey = {
       venter: 'listener',
       listener: 'venter'
