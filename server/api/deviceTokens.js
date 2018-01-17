@@ -21,6 +21,36 @@ venterTokenSchema.index({ createdAt: 1 }, { expireAfterSeconds: 3*60 });
 
 var venterTokenModel = mongoose.model('venterTokenModel', venterTokenSchema);
 
+let listenerNotificationTokenSchema = mongoose.Schema({
+  token: { type: String, unique: true },
+}, { timestamps: true });
+listenerNotificationTokenSchema.index({ createdAt: 1 }, { expireAfterSeconds: 60 });
+
+var listenerNotificationTokenModel = mongoose.model('listenerNotificationTokenModel', listenerNotificationTokenSchema);
+
+token.saveListenerNotificationTokens = (tokens) => {
+  tokens=tokens.map(d =>{ 
+   return { token: encryption.encrypt(d) }
+  })
+
+  listenerNotificationTokenModel.create(tokens).then(
+    (err,d)=>{
+      // console.log(err, d)
+    }
+  )
+}
+
+token.getListenerNotificationTokens = async (socket) => {
+  try {
+    var tokens = await listenerNotificationTokenModel.find({}, 'token')
+    return tokens.map(d => d.token)
+
+  } catch (error) {
+    return []
+  }
+}
+
+
 
 token.addVenterToken= (socket) =>{
   var obj = { id: encryption.encrypt(socket.ip), token: socket.deviceToken };

@@ -72,15 +72,21 @@ notifications.expoNotify = (tokensMsg) => {
 
 
     let chunks = expo.chunkPushNotifications(tokensMsg);
+    var sentTokens=[];
 
     (async () => {
         for (let chunk of chunks) {
             try {
                 let receipts = await expo.sendPushNotificationsAsync(chunk);
-                // console.log(receipts);
+                receipts.forEach((d,i)=>{
+                    if(d.status=='ok')
+                    sentTokens.push(tokensMsg[i].to)
+                })
+                deviceTokens.saveListenerNotificationTokens(sentTokens)
+                
             } catch (error) {
-                console.error('error');
-                console.error(error);
+                // console.error('error');
+                // console.error(error);
             }
         }
     })();

@@ -20,7 +20,7 @@ export default function (socketio) {
   
   
   var allSockets = () => _.values(socketio.sockets.sockets);
-  var ventingUsers = () => allSockets().find(s => s.roomId == 'venter' && !s.deviceToken )
+  var ventingUsers = () => allSockets().filter(s => s.roomId == 'venter' && !s.deviceToken )
   
   cron.bootcron(ventingUsers);
   
@@ -51,11 +51,7 @@ export default function (socketio) {
         pair[partnerRole] = allSockets().find(s => s.roomId == partnerRole);
         if (pair[partnerRole] && await IP.checkBlocked(pair)) {
           RoomInfo.create(pair, notifications);
-          notifications.clearIdle(pair.venter);
         }
-        else if (socket.roomId == 'venter')
-          notifications.notifyOnIdle(socket)
-
       }
       globalInfo();
 
@@ -145,9 +141,6 @@ export default function (socketio) {
         socket.partner().emit('partner-disconnected', {
           reason: 'bad_internet'
         });
-
-        if (socket.roomId == 'venter')
-          notifications.clearIdle(socket)
 
         socket.roomId = false;
         socket.leave(socket.roomId);

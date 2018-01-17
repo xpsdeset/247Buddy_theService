@@ -11,25 +11,41 @@ cronObj.bootcron = function (ventingUsers) {
     cron.schedule('*/30 * * * * *', async function () {
         var listenerTokens = await deviceTokens.getListenerTokens()
         var waitingUsers = await deviceTokens.getVenterWaitingTokens()
-        var webventingUsersLen=0;
+        
+        var alreadyGotNotificationTokens = await deviceTokens.getListenerNotificationTokens()
+        var waitingUsersCount=0;
         var webventingUsers=ventingUsers();
+
+        
         if(webventingUsers)
-            webventingUsersLen = webventingUsers.length
-        if (!waitingUsers.length && webventingUsers)
-            return
+            waitingUsersCount = webventingUsers.length
+        
+        waitingUsersCount = waitingUsers.length + waitingUsersCount;
+
+        if (!waitingUsersCount)
+        return
+        
+        
+
         let tokensMsg = [];
 
-        listenerTokens.forEach(d=>{
-            var waitingUsersCount = waitingUsers.length + webventingUsersLen;
-            if(waitingUsers.includes(d))
-                waitingUsersCount = waitingUsersCount-1;
-            
+        
+        if (!waitingUsersCount)
+            return
 
-            if (!waitingUsersCount)
+        var msg = `There are ${waitingUsersCount} venter(s) on hold`;
+        var dataMsg = `${msg} \n Do you want to talk to them?`;
+
+        listenerTokens.forEach(d=>{
+            if (waitingUsers.includes(d) || alreadyGotNotificationTokens.includes(d))
                 return 
             
             var obj={token:d};
-            obj.body = `There are ${ waitingUsersCount } venter(s) on hold`
+            obj.body = msg
+            obj.data = {
+                msg: dataMsg,
+                state:'need-pairing-venter'
+            }
             tokensMsg.push(obj)
         });
 
@@ -38,8 +54,9 @@ cronObj.bootcron = function (ventingUsers) {
         //     waitingUsers,
         //     tokensMsg
         // )
-        console.log(tokensMsg)
-        // notifications.expoNotify(tokensMsg)
+        
+        // console.log(tokensMsg)
+        notifications.expoNotify(tokensMsg)
     });
 
 }
