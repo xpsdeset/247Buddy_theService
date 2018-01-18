@@ -10,7 +10,7 @@ cronObj.bootcron = function (allSockets) {
     cronObj.ventingUsers = () => allSockets().filter(s=> s.roomId == 'venter' && !s.deviceToken)
     var pairedUsers = () => allSockets()
                             .filter(s => s.roomId && s.roomId != 'listener' && s.roomId != 'venter')
-                            .map( s=>s.token )
+                            .map(s => s.deviceToken )
         
 
     cron.schedule('*/30 * * * * *', async function () {

@@ -87,7 +87,7 @@ token.addRemoveListenerToken= (socket,flag) =>{
     return
 
   if(flag)
-    (new listenerTokenModel(obj)).save()
+  (new listenerTokenModel(obj)).save((err,doc)=>{})
   else
     listenerTokenModel.find(obj).remove().exec();
 

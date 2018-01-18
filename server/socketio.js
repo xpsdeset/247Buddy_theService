@@ -31,12 +31,11 @@ export default function (socketio) {
       venter: 'listener',
       listener: 'venter'
     };
-    socket.partner = async () => {
+    socket.partner =() => {
       var partner = false;
 
       if (socket.roomId && socket.roomId != 'listener' && socket.roomId != 'venter')
         partner = allSockets().find(s => s.roomId == socket.roomId && s.role == partnerKey[socket.role]);
-
       return partner || { emit: function () { }, notAvilable: true }
     }
 
