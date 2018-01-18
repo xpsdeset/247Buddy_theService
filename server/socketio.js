@@ -17,21 +17,21 @@ import cron from './api/cron';
 
 
 export default function (socketio) {
-  
-  
+
+
   var allSockets = () => _.values(socketio.sockets.sockets);
-  var ventingUsers = () => allSockets().filter(s => s.roomId == 'venter' && !s.deviceToken )
-  
-  cron.bootcron(ventingUsers);
-  
+
+
+  cron.bootcron(allSockets);
+
   socketio.on('connection', function (socket) {
-  
+
 
     var partnerKey = {
       venter: 'listener',
       listener: 'venter'
     };
-    socket.partner = () => {
+    socket.partner = async () => {
       var partner = false;
 
       if (socket.roomId && socket.roomId != 'listener' && socket.roomId != 'venter')
@@ -51,7 +51,11 @@ export default function (socketio) {
         pair[partnerRole] = allSockets().find(s => s.roomId == partnerRole);
         if (pair[partnerRole] && await IP.checkBlocked(pair)) {
           RoomInfo.create(pair, notifications);
+          token.addRemoveVenterToken(pair.venter, false)
         }
+          var venterInfo = await cron.getVentersInfo()
+          socketio.to('registered-listener').emit('venter-waiting', venterInfo.msg)
+
       }
       globalInfo();
 
@@ -60,25 +64,25 @@ export default function (socketio) {
 
     socket.on('reconnect-to-room', eInfo => {
 
-      try {
-        var roomInfo = RoomInfo.getPariInfo(eInfo, socket);
+      // try {
+      var roomInfo = RoomInfo.getPariInfo(eInfo, socket);
 
-        socket.roomId = roomInfo.roomId;
-        socket.role = roomInfo.role;
-        socket.join(socket.roomId);
-        roomInfo.roomId = eInfo;
-        socket.isPaired = true;
-        var partner = socket.partner();
-        if (!partner.notAvilable) {
-          partner.emit('room-info', roomInfo);
-        }
-        else
-          roomInfo.notAvilable = partner.notAvilable;
-
-        socket.emit('room-info', roomInfo);
-      } catch (error) {
-        socket.emit('404')
+      socket.roomId = roomInfo.roomId;
+      socket.role = roomInfo.role;
+      socket.join(socket.roomId);
+      roomInfo.roomId = eInfo;
+      socket.isPaired = true;
+      var partner = socket.partner();
+      if (!partner.notAvilable) {
+        partner.emit('room-info', roomInfo);
       }
+      else
+        roomInfo.notAvilable = partner.notAvilable;
+
+      socket.emit('room-info', roomInfo);
+      // } catch (error) {
+      //   socket.emit('404')
+      // }
 
     });
 
@@ -120,13 +124,29 @@ export default function (socketio) {
 
     socket.on('register-listener', flag => {
       deviceTokens.addRemoveListenerToken(socket, flag)
+      if (flag)
+        socket.join('registered-listener')
+      else
+        socket.leave('registered-listener')
     })
     
-    socket.on('register-venter', ()=> {
-      deviceTokens.addVenterToken(socket)
+    socket.on('re-register-listener', async (flag) => {
+
+      if (flag) {
+        socket.join('registered-listener')
+        var venterInfo = await cron.getVentersInfo()
+        socket.emit('venter-waiting', venterInfo.msg)
+      }
+      else
+        socket.leave('registered-listener')
     })
 
-    
+
+    socket.on('register-venter', () => {
+      deviceTokens.addRemoveVenterToken(socket, true)
+    })
+
+
 
 
     socket.on('request-clear-messages', () => {

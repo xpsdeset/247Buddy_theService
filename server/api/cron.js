@@ -5,47 +5,32 @@ import deviceTokens from './deviceTokens';
 
 var cronObj={}
 
-cronObj.bootcron = function (ventingUsers) {
+cronObj.bootcron = function (allSockets) {
 
-    
+    cronObj.ventingUsers = () => allSockets().filter(s=> s.roomId == 'venter' && !s.deviceToken)
+    var pairedUsers = () => allSockets()
+                            .filter(s => s.roomId && s.roomId != 'listener' && s.roomId != 'venter')
+                            .map( s=>s.token )
+        
+
     cron.schedule('*/30 * * * * *', async function () {
-        var listenerTokens = await deviceTokens.getListenerTokens()
-        var waitingUsers = await deviceTokens.getVenterWaitingTokens()
         
-        var alreadyGotNotificationTokens = await deviceTokens.getListenerNotificationTokens()
-        var waitingUsersCount=0;
-        var webventingUsers=ventingUsers();
-
-        
-        if(webventingUsers)
-            waitingUsersCount = webventingUsers.length
-        
-        waitingUsersCount = waitingUsers.length + waitingUsersCount;
-
-        if (!waitingUsersCount)
-        return
-        
-        
-
         let tokensMsg = [];
+        var alreadyGotNotificationTokens = await deviceTokens.getListenerNotificationTokens()
 
-        
-        if (!waitingUsersCount)
+        var waiting = await cron.getVentersInfo();
+
+        if (!waiting.UsersCount)
             return
 
-        var msg = `There are ${waitingUsersCount} venter(s) on hold`;
-        var dataMsg = `${msg} \n Do you want to talk to them?`;
 
+        var listenerTokens = await deviceTokens.getListenerTokens()
         listenerTokens.forEach(d=>{
-            if (waitingUsers.includes(d) || alreadyGotNotificationTokens.includes(d))
+            if (waiting.Users.includes(d) || alreadyGotNotificationTokens.includes(d) || pairedUsers().includes(d) )
                 return 
             
             var obj={token:d};
-            obj.body = msg
-            obj.data = {
-                msg: dataMsg,
-                state:'need-pairing-venter'
-            }
+            obj.body = waiting.msg
             tokensMsg.push(obj)
         });
 
@@ -59,6 +44,31 @@ cronObj.bootcron = function (ventingUsers) {
         notifications.expoNotify(tokensMsg)
     });
 
+}
+
+
+cronObj.getVentersInfo= async function() {
+    
+
+    var waiting = { msg:false};
+    waiting.Users = await deviceTokens.getVenterWaitingTokens()
+
+    waiting.UsersCount = 0;
+    var webventingUsers = cronObj.ventingUsers();
+
+
+    if (webventingUsers)
+        waiting.UsersCount = webventingUsers.length
+
+    waiting.UsersCount = waiting.Users.length + waiting.UsersCount;
+    
+    if (waiting.UsersCount)
+        waiting.msg = `There are ${waiting.UsersCount} venter(s) on hold`;
+
+
+    return waiting
+
+    
 }
 
 

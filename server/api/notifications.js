@@ -18,40 +18,7 @@ discord.Bot = new Discord.Client({
 
 var notifications={};
 
-notifications.notifyOnIdle= (socket)=>{
-    
-    if (!socket.connected)
-        return notifications.clearIdle(socket)
-        
-    var oneMinute=60000;
-    socket.idleTime=1;
-    socket.interValId=setInterval(
-        async()=>{
-        var msg = `There is a venter waiting since ${socket.idleTime} minute(s).`;
-        
-        if (!socket.idleTime > 5)
-        return notifications.clearIdle(socket)
-        
-        
-        
-            
-        discord.Bot.sendMessage({
-            to: discord.channel,
-            message: `${msg}
-                Please help them at https://247buddy.net/chat
-            `
-        });
 
-            
-
-        socket.idleTime += 1;
-    },oneMinute)
-
-}
-
-notifications.clearIdle = (socket) => {
-    clearInterval(socket.interValId)    
-}
 
 
 notifications.expoNotify = (tokensMsg) => {

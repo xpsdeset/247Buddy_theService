@@ -2,7 +2,8 @@ import mongoose from 'mongoose';
 import _ from 'lodash';
 import config from '../config/environment';
 import encryption from '../encryption';
-//create schema
+import mongooseDuplicateError from 'mongoose-duplicate-error';
+
 var token={}
 
 
@@ -10,23 +11,28 @@ var tokenListenerSchema = mongoose.Schema({
   id: String,
   token: { type: String, unique: true }
 });
+tokenListenerSchema.plugin(mongooseDuplicateError);
+
+
 
 var listenerTokenModel = mongoose.model('listenerTokensModel', tokenListenerSchema);
-
 let venterTokenSchema = mongoose.Schema({
   id: String,
   token: { type: String, unique: true },
 }, { timestamps: true });
+venterTokenSchema.plugin(mongooseDuplicateError);
 venterTokenSchema.index({ createdAt: 1 }, { expireAfterSeconds: 3*60 });
 
-var venterTokenModel = mongoose.model('venterTokenModel', venterTokenSchema);
 
+var venterTokenModel = mongoose.model('venterTokenModel', venterTokenSchema);
 let listenerNotificationTokenSchema = mongoose.Schema({
   token: { type: String, unique: true },
 }, { timestamps: true });
+listenerNotificationTokenSchema.plugin(mongooseDuplicateError);
 listenerNotificationTokenSchema.index({ createdAt: 1 }, { expireAfterSeconds: 60 });
-
 var listenerNotificationTokenModel = mongoose.model('listenerNotificationTokenModel', listenerNotificationTokenSchema);
+
+
 
 token.saveListenerNotificationTokens = (tokens) => {
   tokens=tokens.map(d =>{ 
@@ -52,9 +58,13 @@ token.getListenerNotificationTokens = async (socket) => {
 
 
 
-token.addVenterToken= (socket) =>{
+token.addRemoveVenterToken= (socket,flag) =>{
   var obj = { id: encryption.encrypt(socket.ip), token: socket.deviceToken };
-  (new venterTokenModel(obj)).save()
+
+  if (flag)
+    (new venterTokenModel(obj)).save()
+  else
+    venterTokenModel.find(obj).remove().exec();
 
 }
 

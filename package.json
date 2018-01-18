@@ -25,6 +25,7 @@
     "lusca": "^1.5.1",
     "method-override": "^2.3.5",
     "mongoose": "^4.11.12",
+    "mongoose-duplicate-error": "^1.0.0",
     "morgan": "~1.7.0",
     "node-cron": "^1.2.1",
     "passport": "~0.3.0",
