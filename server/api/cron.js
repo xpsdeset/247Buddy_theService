@@ -18,7 +18,7 @@ cronObj.bootcron = function (allSockets) {
         let tokensMsg = [];
         var alreadyGotNotificationTokens = await deviceTokens.getListenerNotificationTokens()
 
-        var waiting = await cron.getVentersInfo();
+        var waiting = await cronObj.getVentersInfo();
 
         if (!waiting.UsersCount)
             return
