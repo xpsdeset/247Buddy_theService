@@ -39,14 +39,10 @@ token.saveListenerNotificationTokens = (tokens) => {
    return { token: encryption.encrypt(d) }
   })
 
-  listenerNotificationTokenModel.create(tokens).then(
-    (err,d)=>{
-      // console.log(err, d)
-    }
-  )
+  listenerNotificationTokenModel.create(tokens).then((err,d)=>{})
 }
 
-token.getListenerNotificationTokens = async (socket) => {
+token.getListenerNotificationTokens = async () => {
   try {
     var tokens = await listenerNotificationTokenModel.find({}, 'token')
     return tokens.map(d => d.token)
@@ -59,16 +55,16 @@ token.getListenerNotificationTokens = async (socket) => {
 
 
 token.addRemoveVenterToken= (socket,flag) =>{
-  var obj = { id: encryption.encrypt(socket.ip), token: socket.deviceToken };
+  var obj = { token: socket.deviceToken };
 
   if (flag)
-    (new venterTokenModel(obj)).save()
+    (new venterTokenModel(obj)).save((err, d) => { })
   else
     venterTokenModel.find(obj).remove().exec();
 
 }
 
-token.getVenterWaitingTokens = async (socket) => {
+token.getVenterWaitingTokens = async () => {
   try {
     var tokens = await venterTokenModel.find({}, 'token')
     return tokens.map(d => d.token)
