@@ -52,7 +52,7 @@ export default function (socketio) {
         pair[partnerRole] = allSockets().find(s => s.roomId == partnerRole);
         if (pair[partnerRole] && await IP.checkBlocked(pair)) {
           RoomInfo.create(pair, notifications);
-          token.addRemoveVenterToken(pair.venter, false)
+          deviceTokens.addRemoveVenterToken(pair.venter, false)
         }
           var venterInfo = await cron.getVentersInfo()
           console.log(venterInfo.msg)
