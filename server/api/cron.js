@@ -23,6 +23,9 @@ cronObj.bootcron = function (allSockets) {
         if (!waiting.UsersCount)
             return
 
+        
+
+
 
         var listenerTokens = await deviceTokens.getListenerTokens()
         listenerTokens.forEach(d=>{
@@ -41,7 +44,7 @@ cronObj.bootcron = function (allSockets) {
         // )
         
         // console.log(tokensMsg)
-        notifications.expoNotify(tokensMsg)
+        notifications.notifyExpo(tokensMsg)
     });
 
 }

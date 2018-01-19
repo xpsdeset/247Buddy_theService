@@ -21,7 +21,15 @@ var notifications={};
 
 
 
-notifications.expoNotify = (tokensMsg) => {
+notifications.notifyDiscord = (msg) => {
+    discord.Bot.sendMessage({
+            to: discord.channel,
+            message: `${msg}
+                Please help them at https://247buddy.net/chat
+            `
+        });
+}
+notifications.notifyExpo = (tokensMsg) => {
 
     let expo = new Expo();
     let messages= [];

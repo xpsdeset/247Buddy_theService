@@ -44,6 +44,8 @@ export default function (socketio) {
       socket.roomId = role;
 
       if (socket.roomId == 'listener' || socket.roomId == 'venter') {
+        if (socket.roomId == 'venter' && socket.deviceToken)
+          deviceTokens.addRemoveVenterToken(socket, true)
         var pair = {};
         pair[role] = socket;
         var partnerRole = partnerKey[role];
@@ -53,7 +55,8 @@ export default function (socketio) {
           token.addRemoveVenterToken(pair.venter, false)
         }
           var venterInfo = await cron.getVentersInfo()
-          socketio.to('registered-listener').emit('venter-waiting', venterInfo.msg)
+          console.log(venterInfo.msg)
+          socket.broadcast.to('registered-listener').emit('venter-waiting', venterInfo.msg)
 
       }
       globalInfo();
@@ -141,9 +144,6 @@ export default function (socketio) {
     })
 
 
-    socket.on('register-venter', () => {
-      deviceTokens.addRemoveVenterToken(socket, true)
-    })
 
 
 
