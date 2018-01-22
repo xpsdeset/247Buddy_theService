@@ -7,7 +7,7 @@ var cronObj={}
 
 cronObj.bootcron = function (allSockets) {
 
-    cronObj.ventingUsers = () => allSockets().filter(s=> s.roomId == 'venter' && !s.deviceToken)
+    cronObj.ventingUsers = () => allSockets().filter(s=> s.roomId == 'venter')
     var pairedUsers = () => allSockets()
                             .filter(s => s.roomId && s.roomId != 'listener' && s.roomId != 'venter')
                             .map(s => s.deviceToken )
@@ -23,10 +23,6 @@ cronObj.bootcron = function (allSockets) {
         if (!waiting.UsersCount)
             return
 
-        
-
-
-
         var listenerTokens = await deviceTokens.getListenerTokens()
         listenerTokens.forEach(d=>{
             if (waiting.Users.includes(d) || alreadyGotNotificationTokens.includes(d) || pairedUsers().includes(d) )
@@ -37,11 +33,11 @@ cronObj.bootcron = function (allSockets) {
             tokensMsg.push(obj)
         });
 
-        // console.log(
-        //     listenerTokens,
-        //     waitingUsers,
-        //     tokensMsg
-        // )
+        
+        console.log(listenerTokens)
+        console.log(waiting.Users)
+        console.log(tokensMsg)
+        
         
         // console.log(tokensMsg)
         notifications.notifyExpo(tokensMsg)
@@ -57,22 +53,34 @@ cronObj.getVentersInfo= async function() {
     waiting.Users = await deviceTokens.getVenterWaitingTokens()
 
     waiting.UsersCount = 0;
-    var webventingUsers = cronObj.ventingUsers();
+    var webventingUsers = cronObj.ventingUsers() || [];
 
-
-    if (webventingUsers)
-        waiting.UsersCount = webventingUsers.length
 
     waiting.UsersCount = waiting.Users.length + waiting.UsersCount;
+
     
     if (waiting.UsersCount)
-        waiting.msg = `There are ${waiting.UsersCount} venter(s) on hold`;
+        waiting.msg = `Someone wants to be heard.`;
 
 
     return waiting
 
     
 }
+
+
+cronObj.notifyVentersListenerReady = function (Users) {
+    var msg = 'Someone is here to listen';
+    var tokensMsg = Users.map(d => {
+        var obj = { token: d };
+        obj.body = msg
+        return obj
+    });
+    if (tokensMsg && tokensMsg[0])
+        notifications.notifyExpo(tokensMsg)
+
+}
+
 
 
 export default cronObj;

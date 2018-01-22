@@ -21,7 +21,7 @@ let venterTokenSchema = mongoose.Schema({
   token: { type: String, unique: true },
 }, { timestamps: true });
 venterTokenSchema.plugin(mongooseDuplicateError);
-venterTokenSchema.index({ createdAt: 1 }, { expireAfterSeconds: 3*60 });
+venterTokenSchema.index({ createdAt: 1 }, { expireAfterSeconds: 3*60-15 });
 
 
 var venterTokenModel = mongoose.model('venterTokenModel', venterTokenSchema);
@@ -39,7 +39,7 @@ token.saveListenerNotificationTokens = (tokens) => {
    return { token: encryption.encrypt(d) }
   })
 
-  listenerNotificationTokenModel.create(tokens).then((err,d)=>{})
+  listenerNotificationTokenModel.create(tokens,(err,d)=>{})
 }
 
 token.getListenerNotificationTokens = async () => {

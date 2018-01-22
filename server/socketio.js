@@ -55,8 +55,10 @@ export default function (socketio) {
           deviceTokens.addRemoveVenterToken(pair.venter, false)
         }
           var venterInfo = await cron.getVentersInfo()
-          console.log(venterInfo.msg)
           socket.broadcast.to('registered-listener').emit('venter-waiting', venterInfo.msg)
+
+          if (socket.roomId == 'listener')
+            cron.notifyVentersListenerReady(venterInfo.Users)
 
       }
       globalInfo();
@@ -124,10 +126,15 @@ export default function (socketio) {
       socket.deviceToken = encryption.encrypt(token);
     })
 
-    socket.on('register-listener', flag => {
+    socket.on('register-listener', async (flag) => {
       deviceTokens.addRemoveListenerToken(socket, flag)
       if (flag)
-        socket.join('registered-listener')
+        {
+          socket.join('registered-listener')
+          var venterInfo = await cron.getVentersInfo()
+          socket.emit('venter-waiting', venterInfo.msg)
+
+        }
       else
         socket.leave('registered-listener')
     })
