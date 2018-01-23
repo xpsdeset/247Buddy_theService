@@ -34,9 +34,9 @@ cronObj.bootcron = function (allSockets) {
         });
 
         
-        console.log(listenerTokens)
-        console.log(waiting.Users)
-        console.log(tokensMsg)
+        // console.log(listenerTokens)
+        // console.log(waiting.Users)
+        // console.log(tokensMsg)
         
         
         // console.log(tokensMsg)
