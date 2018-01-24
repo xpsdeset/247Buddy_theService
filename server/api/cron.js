@@ -4,7 +4,7 @@ import deviceTokens from './deviceTokens';
 
 
 var cronObj={}
-
+cronObj.count=0;
 cronObj.bootcron = function (allSockets) {
 
     cronObj.ventingUsers = () => allSockets().filter(s=> s.roomId == 'venter')
@@ -33,6 +33,11 @@ cronObj.bootcron = function (allSockets) {
             tokensMsg.push(obj)
         });
 
+        if(cronObj.count%6==0)
+            notifications.notifyDiscord(msg)
+        cronObj.count += 1;
+
+
         
         // console.log(listenerTokens)
         // console.log(waiting.Users)
@@ -56,7 +61,7 @@ cronObj.getVentersInfo= async function() {
     var webventingUsers = cronObj.ventingUsers() || [];
 
 
-    waiting.UsersCount = waiting.Users.length + waiting.UsersCount;
+    waiting.UsersCount = waiting.Users.length + webventingUsers.length;
 
     
     if (waiting.UsersCount)
