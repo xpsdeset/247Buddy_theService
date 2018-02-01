@@ -138,6 +138,10 @@ footer, .page-wrap:after {
     width:100%;
   }
 
+.vcenter {
+    padding-top: 20%;
+}
+
 // Component styles are injected through grunt
 /* inject:scss */
 @import 'index/index';
