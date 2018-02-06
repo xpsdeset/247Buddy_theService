@@ -34,7 +34,7 @@ cronObj.bootcron = function (allSockets) {
         });
 
         if(cronObj.count%6==0)
-            notifications.notifyDiscord(msg)
+            notifications.notifyDiscord(waiting.msg)
         cronObj.count += 1;
 
 

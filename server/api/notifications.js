@@ -60,8 +60,8 @@ notifications.notifyExpo = (tokensMsg) => {
                 deviceTokens.saveListenerNotificationTokens(sentTokens)
                 
             } catch (error) {
-                // console.error('error');
-                // console.error(error);
+                console.error('error');
+                console.error(error);
             }
         }
     })();
