@@ -11,20 +11,21 @@ import IP from './api/IP'
 import sponsor from './api/sponsor'
 import loading from './api/loading'
 import payment from './api/payment'
+import accountkit from './api/accountkit'
 
 export default function(app) {
     // Insert routes below
 
-    app.use('/api/users', require('./api/user'));
-
     app.use('/api/status', (req,res)=>res.json({time:new Date()}));
 
+    app.use('/api/users', require('./api/user'));
     app.use('/api/auth', require('./auth').default);
 
     IP.route(app);
     sponsor.route(app);
     loading.route(app);
     payment.route(app);
+    accountkit.route(app);
 
     // All undefined asset or api routes should return a 404
     app.route('/:url(api|auth|components|app|bower_components|assets)/*')

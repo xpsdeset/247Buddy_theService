@@ -11,47 +11,56 @@ import IP from './api/IP';
 import notifications from './api/notifications';
 import encryption from './encryption';
 import deviceTokens from './api/deviceTokens';
+import cron from './api/cron';
+
 
 
 
 export default function (socketio) {
-  
 
-  
+
+  var allSockets = () => _.values(socketio.sockets.sockets);
+
+
+  cron.bootcron(allSockets);
+
   socketio.on('connection', function (socket) {
 
-    var allSockets=()=>_.values(socketio.sockets.sockets);
+
     var partnerKey = {
       venter: 'listener',
       listener: 'venter'
     };
-    socket.partner = () => {
+    socket.partner =() => {
       var partner = false;
-      
-      if(socket.roomId && socket.roomId!='listener' && socket.roomId!='venter')
-        partner = allSockets().find(s => s.roomId == socket.roomId && s.role==partnerKey[socket.role]);
-      
-      return partner || {emit:function(){},notAvilable:true}
+
+      if (socket.roomId && socket.roomId != 'listener' && socket.roomId != 'venter')
+        partner = allSockets().find(s => s.roomId == socket.roomId && s.role == partnerKey[socket.role]);
+      return partner || { emit: function () { }, notAvilable: true }
     }
 
-    socket.on('find-pair', async(role) => {
+    socket.on('find-pair', async (role) => {
       socket.role = role;
-      socket.roomId=role;
+      socket.roomId = role;
 
-      if (socket.roomId=='listener' || socket.roomId=='venter') {
-        var pair={};
+      if (socket.roomId == 'listener' || socket.roomId == 'venter') {
+        if (socket.roomId == 'venter' && socket.deviceToken)
+          deviceTokens.addRemoveVenterToken(socket, true)
+        var pair = {};
         pair[role] = socket;
-        var partnerRole=partnerKey[role];
-        pair[partnerRole]=allSockets().find(s => s.roomId == partnerRole);
-        if(pair[partnerRole] && await IP.checkBlocked(pair))
-            {
-              RoomInfo.create(pair, notifications);
-              notifications.clearIdle(pair.venter);
-            }
-        else if (socket.roomId == 'venter')
-            notifications.notifyOnIdle(socket)
-          
-      } 
+        var partnerRole = partnerKey[role];
+        pair[partnerRole] = allSockets().find(s => s.roomId == partnerRole);
+        if (pair[partnerRole] && await IP.checkBlocked(pair)) {
+          RoomInfo.create(pair, notifications);
+          deviceTokens.addRemoveVenterToken(pair.venter, false)
+        }
+          var venterInfo = await cron.getVentersInfo()
+          socket.broadcast.to('registered-listener').emit('venter-waiting', venterInfo.msg)
+
+          if (socket.roomId == 'listener')
+            cron.notifyVentersListenerReady(venterInfo.Users)
+
+      }
       globalInfo();
 
     });
@@ -59,40 +68,39 @@ export default function (socketio) {
 
     socket.on('reconnect-to-room', eInfo => {
 
-      try {
-        var roomInfo = RoomInfo.getPariInfo(eInfo,socket);
-        
-        socket.roomId = roomInfo.roomId;
-        socket.role = roomInfo.role;
-        socket.join(socket.roomId);
-        roomInfo.roomId=eInfo;
+      // try {
+      var roomInfo = RoomInfo.getPariInfo(eInfo, socket);
+
+      socket.roomId = roomInfo.roomId;
+      socket.role = roomInfo.role;
+      socket.join(socket.roomId);
+      roomInfo.roomId = eInfo;
       socket.isPaired = true;
-      var partner=socket.partner();
-      if(!partner.notAvilable)
-      {
+      var partner = socket.partner();
+      if (!partner.notAvilable) {
         partner.emit('room-info', roomInfo);
       }
       else
-        roomInfo.notAvilable=partner.notAvilable;
-      
+        roomInfo.notAvilable = partner.notAvilable;
+
       socket.emit('room-info', roomInfo);
-      } catch (error) {
-        socket.emit('404')
-      }
+      // } catch (error) {
+      //   socket.emit('404')
+      // }
 
     });
 
     socket.on('report-partner-disconnect', () => {
-      socket.partner().emit('partner-disconnected', {reason: 'bad_internet'});
+      socket.partner().emit('partner-disconnected', { reason: 'bad_internet' });
     });
 
- 
+
 
     socket.on('set-ip', (deviceId) => {
       var ip;
       if (deviceId)
         ip = deviceId;
-      else if ( _.isEmpty(socket.request.headers['x-forwarded-for']) || socket.request.headers['x-forwarded-for'] == "10.0.2.2")
+      else if (_.isEmpty(socket.request.headers['x-forwarded-for']) || socket.request.headers['x-forwarded-for'] == "10.0.2.2")
         ip = _.sample([
           '10.0.0.2',
           '10.255.255.255',
@@ -106,11 +114,11 @@ export default function (socketio) {
         ])
       else
         ip = socket.request.headers['x-forwarded-for'];
-      
+
       socket.ip = ip;
-      
-      IP.checkBannedIp(socket.ip,()=> socket.emit('bannedUser'))
-      
+
+      IP.checkBannedIp(socket.ip, () => socket.emit('bannedUser'))
+
       globalInfo(true);
     });
 
@@ -118,9 +126,33 @@ export default function (socketio) {
       socket.deviceToken = encryption.encrypt(token);
     })
 
-    socket.on('register-listener', flag=>{
-      deviceTokens.addRemoveToken(socket,flag)
+    socket.on('register-listener', async (flag) => {
+      deviceTokens.addRemoveListenerToken(socket, flag)
+      if (flag)
+        {
+          socket.join('registered-listener')
+          var venterInfo = await cron.getVentersInfo()
+          socket.emit('venter-waiting', venterInfo.msg)
+
+        }
+      else
+        socket.leave('registered-listener')
     })
+    
+    socket.on('re-register-listener', async (flag) => {
+
+      if (flag) {
+        socket.join('registered-listener')
+        var venterInfo = await cron.getVentersInfo()
+        socket.emit('venter-waiting', venterInfo.msg)
+      }
+      else
+        socket.leave('registered-listener')
+    })
+
+
+
+
 
 
     socket.on('request-clear-messages', () => {
@@ -129,18 +161,14 @@ export default function (socketio) {
 
     // Call onDisconnect.
 
-    var cleanUp=() => {
+    var cleanUp = () => {
 
-      if(socket.roomId)
-      {
+      if (socket.roomId) {
         socket.partner().emit('partner-disconnected', {
           reason: 'bad_internet'
         });
 
-        if(socket.roomId == 'venter')
-          notifications.clearIdle(socket)
-
-        socket.roomId=false;
+        socket.roomId = false;
         socket.leave(socket.roomId);
         globalInfo();
       }
@@ -154,16 +182,16 @@ export default function (socketio) {
       var sock = socketio.sockets;
       // if (flag)
       //   sock = socket;
-      var allSocks=allSockets();
-      var listenerCount=0;
-      var venterCount=0;
-      var rooms=[];
-      allSocks.forEach(d=>{
-        if(d.roomId){
-          if(d.roomId=='listener')
-            listenerCount+=1;
-          else if(d.roomId=='venter')
-              venterCount+=1;
+      var allSocks = allSockets();
+      var listenerCount = 0;
+      var venterCount = 0;
+      var rooms = [];
+      allSocks.forEach(d => {
+        if (d.roomId) {
+          if (d.roomId == 'listener')
+            listenerCount += 1;
+          else if (d.roomId == 'venter')
+            venterCount += 1;
           else
             rooms.push(d.roomId);
         }
@@ -201,23 +229,23 @@ export default function (socketio) {
         role: socket.role,
         messages: messages
       };
-      IP.reportIncident(bannedObject,()=>socket.emit('incident-recorded'))
+      IP.reportIncident(bannedObject, () => socket.emit('incident-recorded'))
 
     });
     socket.on('block-user', () => {
-            var blockObject = {
-              ip1: socket.partnerIp,
-              ip2: socket.ip
-            };
-            IP.blockUser(blockObject,()=>socket.emit('user-blocked'))
-          });
+      var blockObject = {
+        ip1: socket.partnerIp,
+        ip2: socket.ip
+      };
+      IP.blockUser(blockObject, () => socket.emit('user-blocked'))
+    });
 
-  
+
 
     socket.on('create-badge', (badge) => {
-      badge.time= new Date();
-      badge.roomId= socket.roomId;
-      payment.initPayPal(badge,url=>socket.emit('paymentUrl', url))
+      badge.time = new Date();
+      badge.roomId = socket.roomId;
+      payment.initPayPal(badge, url => socket.emit('paymentUrl', url))
     });
 
     socket.on('badge-purchased', () => {

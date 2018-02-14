@@ -24,6 +24,12 @@ angular.module('247App')
       //   controller: 'SignupController',
       //   controllerAs: 'vm'
       // })
+      .state('accountkit', {
+        url: '/accountkit',
+        templateUrl: 'app/account/accountkit/accountkit.html',
+        controller: 'AccountKitController',
+        controllerAs: 'vm'
+      })
       .state('settings', {
         url: '/settings',
         templateUrl: 'app/account/settings/settings.html',

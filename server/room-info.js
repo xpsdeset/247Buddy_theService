@@ -35,7 +35,7 @@ RoomInfo.create = (pair, notifications) => {
     if (pair.listener.deviceToken)
         tokens.push(pair.listener.deviceToken)
 
-    notifications.expoNotify('Your Buddy is here', tokens)
+    // notifications.expoNotify('Your Buddy is here', tokens)
 };
 
 RoomInfo.getPariInfo = (info, socket) => {
